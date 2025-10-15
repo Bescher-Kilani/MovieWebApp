@@ -1,4 +1,4 @@
-package com.example.MovieAppBackend.DTO;
+package Bescher.Dev.MovieAppBackend.DTO;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
