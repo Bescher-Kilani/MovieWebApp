@@ -1,4 +1,4 @@
-package com.example.MovieAppBackend;
+package Bescher.Dev.MovieAppBackend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
