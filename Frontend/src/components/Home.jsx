@@ -26,7 +26,7 @@ const Home = () => {
     const [trendingMovies, setTrendingMovies] = useState([]);
 
 
-    useDebounce(() => setDebouncedSearchTerm(searchTerm), 500, [searchTerm])
+    useDebounce(() => setDebouncedSearchTerm(searchTerm), 1000, [searchTerm])
 
     const fetchMovies = async (query = '') => {
         setIsLoading(true);
@@ -67,6 +67,7 @@ const Home = () => {
     const loadTrendingMovies = async () => {
         try {
             const movies = await getTrendingMovies();
+            console.log('Trending Movies:', movies);
             setTrendingMovies(movies);
 
         } catch (error) {
@@ -102,9 +103,9 @@ const Home = () => {
 
                         <ul>
                             {trendingMovies.map((movie, index) => (
-                                <li key={movie.$id}>
-                                    <p>{index + +1}</p>
-                                    <img src={movie.poster_url} alt={movie.title}/>
+                                <li key={movie.id}>
+                                    <p>{index + 1}</p>
+                                    <img src={movie.posterUrl} alt={movie.searchTerm}/>
                                 </li>
                             ))}
                         </ul>
@@ -120,7 +121,10 @@ const Home = () => {
                     ) :(
                         <ul>
                             {movieList.map(movie => (
-                                <MovieCard movie={movie} setMovieList={setMovieList}/>
+                                <MovieCard
+                                    key={movie.id}
+                                    movie={movie}
+                                    setMovieList={setMovieList}/>
                             ))}
                         </ul>
                     ) }
