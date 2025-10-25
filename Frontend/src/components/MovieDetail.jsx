@@ -91,7 +91,11 @@ const MovieDetail = () => {
 
     // === CONDITIONAL RENDERING ===
 
-    if (isLoading) return <Spinner />;
+    if (isLoading) return (
+        <div className="min-h-screen flex items-center justify-center bg-primary">
+            <Spinner />
+        </div>
+    );
     // Wenn noch lädt → zeige nur Spinner
 
     if (errorMessage) return (
@@ -187,11 +191,11 @@ const MovieDetail = () => {
 
 
                     {/* === DETAILS SECTION === */}
-                    <div className="flex-1">
+                    <div className="flex-1 min-w-0">
                         {/* flex-1: Nimmt restlichen Platz ein */}
 
                         {/* === TITLE === */}
-                        <h1 className="text-4xl font-bold mb-2">{movie.title}</h1>
+                        <h2 className="text-4xl font-bold mb-2">{movie.title}</h2>
                         {/* text-4xl: ~36px, font-bold: 700 weight, mb-2: margin-bottom */}
 
                         {/* === TAGLINE (Optional) === */}
@@ -351,7 +355,7 @@ const MovieDetail = () => {
                                                 <img
                                                     src={`https://image.tmdb.org/t/p/w200${company.logo_path}`}
                                                     alt={company.name}
-                                                    className="h-8 object-contain bg-white/10 p-2 rounded"
+                                                    className="h-15 object-contain bg-white/100 p-2 rounded"
                                                     // h-8: Höhe 32px
                                                     // object-contain: Behält Aspect Ratio
                                                     // bg-white/10: leichter weißer Hintergrund
@@ -375,7 +379,7 @@ const MovieDetail = () => {
                             */
                             <div className="mb-6">
                                 <h3 className="text-lg font-semibold mb-3">Top Cast</h3>
-                                <div className="flex overflow-x-auto gap-4 pb-4 hide-scrollbar">
+                                <div className="flex flex-wrap overflow-x-auto gap-4 pb-4 hide-scrollbar">
                                     {/*
                                         overflow-x-auto: Horizontal scrollbar wenn zu viele Items
                                         hide-scrollbar: Custom CSS (aus index.css)
