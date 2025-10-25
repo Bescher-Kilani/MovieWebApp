@@ -65,7 +65,7 @@
         }
 
         & ul li {
-            @apply min-w-[230px] flex flex-row items-center;
+            @apply min-w-[223px] flex flex-row items-center;
         }
 
         & ul li p {

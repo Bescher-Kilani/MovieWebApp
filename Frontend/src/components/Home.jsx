@@ -4,6 +4,7 @@ import {getTrendingMovies, updateSearchCount} from "../api.js";
 import Search from "./Search.jsx";
 import Spinner from "./Spinner.jsx";
 import MovieCard from "./MovieCard.jsx";
+import {Link} from "react-router-dom";
 
 
 const API_BASE_URL = 'https://api.themoviedb.org/3';
@@ -101,12 +102,14 @@ const Home = () => {
                     <section className="trending">
                         <h2>Trending Movies</h2>
 
-                        <ul>
+                        <ul className="flex flex-wrap">
                             {trendingMovies.map((movie, index) => (
-                                <li key={movie.id}>
-                                    <p>{index + 1}</p>
-                                    <img src={movie.posterUrl} alt={movie.searchTerm}/>
-                                </li>
+                                <Link to={`/movie/${movie.movieId}`}>
+                                    <li key={movie.id}>
+                                         <p>{index + 1}</p>
+                                        <img src={movie.posterUrl} alt={movie.searchTerm}/>
+                                     </li>
+                                </Link>
                             ))}
                         </ul>
                     </section>
