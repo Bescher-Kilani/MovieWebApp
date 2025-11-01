@@ -148,7 +148,7 @@ const MovieDetail = () => {
                                 // object-cover: Bild füllt Container ohne Verzerrung
                             />
 
-                            <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/60 to-transparent"></div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/30 to-transparent"></div>
                             {/* Gradient Overlay ÜBER dem Bild:
                                 - absolute: positioned über Image
                                 - inset-0: top/right/bottom/left = 0 (füllt parent)
@@ -371,7 +371,7 @@ const MovieDetail = () => {
                         )}
 
 
-                        {/* === CAST (Top 10) === */}
+                        {/* === CAST (Top 12) === */}
                         {movie.credits?.cast && movie.credits.cast.length > 0 && (
                             /*
                                 Nur zeigen wenn credits existiert (von append_to_response)
@@ -386,7 +386,7 @@ const MovieDetail = () => {
                                         pb-4: Padding-bottom für Scrollbar-Space
                                     */}
 
-                                    {movie.credits.cast.slice(0, 10).map(person => (
+                                    {movie.credits.cast.slice(0, 12).map(person => (
                                         /*
                                             slice(0, 10): Nur erste 10 Cast Members
                                             Array von: {id, name, character, profile_path, ...}
