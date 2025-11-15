@@ -1,3 +1,5 @@
+import {API_BASE_URL} from "./config.js";
+
 const API_URL = 'http://localhost:8080/api/movies';
 
 export const updateSearchCount = async (searchTerm, movie) => {
@@ -21,7 +23,7 @@ export const updateSearchCount = async (searchTerm, movie) => {
 
 export const getTrendingMovies = async () => {
     try {
-        const response = await fetch(`${API_URL}/trending`);
+        const response = await fetch(`${API_BASE_URL}/api/movies/trending`);
         return await response.json();
     } catch (error) {
         console.error('Error:', error);

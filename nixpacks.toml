@@ -1,0 +1,5 @@
+[phases.build]
+cmds = ["echo 'Using Docker build'"]
+
+[phases.deploy]
+cmds = ["echo 'Deployment configured via Dockerfile'"]
