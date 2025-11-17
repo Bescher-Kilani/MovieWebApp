@@ -1,10 +1,9 @@
 import {API_BASE_URL} from "./config.js";
 
-const API_URL = 'http://localhost:8080/api/movies';
 
 export const updateSearchCount = async (searchTerm, movie) => {
     try {
-        const response = await fetch(`${API_URL}/search`, {
+        const response = await fetch(`${API_BASE_URL}/search`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
