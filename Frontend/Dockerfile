@@ -15,6 +15,7 @@ COPY Frontend/ .
 # Build argument für API URL
 ARG VITE_API_URL
 ENV VITE_API_URL=$VITE_API_URL
+RUN echo "Building with API_URL: $VITE_API_URL"  # <- NEU: Force rebuild
 
 ARG VITE_TMDB_API_KEY
 ENV VITE_TMDB_API_KEY=$VITE_TMDB_API_KEY
