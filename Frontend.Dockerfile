@@ -1,31 +1,38 @@
-# Multi-stage build für React/Vite
-FROM node:20-alpine AS build
-
-WORKDIR /app
-
-# Copy package files
-COPY Frontend/package*.json ./
-
-# Install dependencies
-RUN npm ci
-
-# Copy source code
-COPY Frontend/ .
-
-# Build the application
-RUN npm run build
-
-# Production stage with nginx
-FROM nginx:alpine
-
-# Copy built files
-COPY --from=build /app/dist /usr/share/nginx/html
-
-# Copy nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Expose port
-EXPOSE 80
-
-# Start nginx
-CMD ["nginx", "-g", "daemon off;"]
+ # Multi-stage build für React/Vite
+   FROM node:20-alpine AS build
+   
+   WORKDIR /app
+   
+   # Copy package files
+   COPY Frontend/package*.json ./
+   
+   # Install dependencies
+   RUN npm ci
+   
+   # Copy source code
+   COPY Frontend/ .
+   
+   # Build argument für API URL
+   ARG VITE_API_URL
+   ENV VITE_API_URL=$VITE_API_URL
+   
+   ARG VITE_TMDB_API_KEY
+   ENV VITE_TMDB_API_KEY=$VITE_TMDB_API_KEY
+   
+   # Build the application
+   RUN npm run build
+   
+   # Production stage with nginx
+   FROM nginx:alpine
+   
+   # Copy built files
+   COPY --from=build /app/dist /usr/share/nginx/html
+   
+   # Copy nginx configuration
+   COPY nginx.conf /etc/nginx/conf.d/default.conf
+   
+   # Expose port
+   EXPOSE 80
+   
+   # Start nginx
+   CMD ["nginx", "-g", "daemon off;"]
