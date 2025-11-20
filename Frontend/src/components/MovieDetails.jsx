@@ -1,92 +1,110 @@
+// =============================================================================
+// MOVIE DETAIL COMPONENT - Individual Movie Page
+// =============================================================================
+// This component displays detailed information about a single movie:
+// - Backdrop image (large hero image)
+// - Movie poster
+// - Title, tagline, rating, year, runtime, language
+// - Genres
+// - Overview (plot summary)
+// - Budget, revenue, status, production countries
+// - Production companies (with logos)
+// - Top 12 cast members with photos
+// - Link to official website
+//
+// Movie ID comes from URL parameter (e.g., /movie/550)
+// Data fetched from TMDB API using the movie ID
+// =============================================================================
+
 // === IMPORTS ===
 import React, {useEffect, useState} from "react";
-// useEffect: Für Side-Effects (API Call beim Laden)
-// useState: Für State Management (movie, loading, error)
+// useEffect: For side effects (API call on component mount)
+// useState: For state management (movie, loading, error)
 import {Link, useParams} from "react-router-dom";
-// useParams: Holt die :id aus der URL (z.B. /movie/550 → id = 550)
-// Link: Component für Navigation zurück zur Home-Page
+// useParams: Extracts :id from URL (e.g., /movie/550 → id = 550)
+// Link: Component for navigation back to home page
 import Spinner from "./Spinner.jsx";
-// Loading-Animation während API Call läuft
+// Loading animation shown during API call
 
 
-// === API KONFIGURATION ===
+// === API CONFIGURATION ===
 const API_BASE_URL = 'https://api.themoviedb.org/3';
-// Basis-URL für alle TMDB API Calls
+// Base URL for all TMDB API calls
 
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
-// API Key aus deiner .env Datei (VITE_TMDB_API_KEY=...)
+// API key from .env file (VITE_TMDB_API_KEY=...)
 
 const API_OPTIONS = {
-    method: 'GET',                    // HTTP GET Request
+    method: 'GET',                    // HTTP GET request
     headers: {
-        accept: 'application/json',    // Wir wollen JSON zurück
-        Authorization: `Bearer ${API_KEY}`  // Auth mit Bearer Token
+        accept: 'application/json',    // We want JSON response
+        Authorization: `Bearer ${API_KEY}`  // Auth with Bearer token
     }
 };
 
 
 // === COMPONENT START ===
-const MovieDetail = () => {
+const MovieDetails = () => {
     const { id } = useParams();
-    // Holt die movie ID aus der URL
-    // Beispiel: /movie/550 → id = "550"
+    // Extract movie ID from URL
+    // Example: /movie/550 → id = "550"
 
     // === STATE MANAGEMENT ===
     const [movie, setMovie] = useState(null);
-    // Speichert die Film-Details (null = noch nicht geladen)
+    // Stores movie details (null = not loaded yet)
 
     const [isLoading, setIsLoading] = useState(true);
-    // true = zeigt Spinner, false = zeigt Content
+    // true = show spinner, false = show content
 
     const [errorMessage, setErrorMessage] = useState('');
-    // Speichert Fehlermeldungen falls API Call fehlschlägt
+    // Stores error messages if API call fails
 
 
-    // === API CALL BEIM COMPONENT MOUNT ===
+    // === API CALL ON COMPONENT MOUNT ===
     useEffect(() => {
-        // useEffect läuft NACH dem ersten Render
+        // useEffect runs AFTER first render
 
         const fetchMovieDetails = async () => {
-            setIsLoading(true);        // Zeige Spinner
-            setErrorMessage('');       // Reset alte Errors
+            setIsLoading(true);        // Show spinner
+            setErrorMessage('');       // Reset old errors
 
             try {
-                // API Call zu TMDB
+                // API call to TMDB
                 const response = await fetch(
                     `${API_BASE_URL}/movie/${id}?append_to_response=credits,videos`,
-                    //                    ↑ ID aus URL   ↑ Extra Daten in einem Call
+                    //                    ↑ ID from URL   ↑ Extra data in one call
                     API_OPTIONS
                 );
 
                 if (!response.ok) {
-                    // HTTP Error (404, 500, etc.)
+                    // HTTP error (404, 500, etc.)
                     throw new Error('Failed to fetch movie details');
                 }
 
                 const data = await response.json();
-                // Parse JSON Response
+                // Parse JSON response
 
                 setMovie(data);
-                // Speichere Film-Details im State
+                // Store movie details in state
 
                 console.log('Movie Details:', data);
-                // Debug: Zeigt alle verfügbaren Daten in Console
+                // Debug: Show all available data in console
 
             } catch (error) {
                 console.error(`Error fetching movie details: ${error}`);
                 setErrorMessage('Failed to load movie details');
             } finally {
                 setIsLoading(false);
-                // Egal ob Erfolg oder Error: Loading ist fertig
+                // Whether success or error: loading is done
             }
         };
 
-        fetchMovieDetails();  // Führe die Funktion aus
+        fetchMovieDetails();  // Execute the function
 
     }, [id]);
-    // [id] = Dependency Array
-    // useEffect läuft NEU wenn sich die ID ändert
-    // (z.B. von /movie/550 zu /movie/551)
+    // [id] = Dependency array
+    // useEffect runs again when ID changes
+    // (e.g., from /movie/550 to /movie/551)
 
 
     // === CONDITIONAL RENDERING ===
@@ -96,34 +114,34 @@ const MovieDetail = () => {
             <Spinner />
         </div>
     );
-    // Wenn noch lädt → zeige nur Spinner
+    // If still loading → show only spinner
 
     if (errorMessage) return (
         <p className="text-red-500 text-center mt-10">{errorMessage}</p>
     );
-    // Wenn Error → zeige Fehlermeldung
+    // If error → show error message
 
     if (!movie) return null;
-    // Wenn kein Film geladen → zeige nichts
-    // (Sollte nicht passieren, aber Sicherheit)
+    // If no movie loaded → show nothing
+    // (Should not happen, but safety check)
 
 
     // === MAIN RENDER ===
     return (
         <main className="min-h-screen bg-primary text-white">
-            {/* Volle Bildschirmhöhe, primary Background, weißer Text */}
+            {/* Full screen height, primary background, white text */}
 
             <div className="pattern"></div>
-            {/* Hintergrund-Pattern (aus index.css) */}
+            {/* Background pattern (defined in index.css) */}
 
             <div className="wrapper relative z-10">
-                {/* Container mit Padding (aus index.css), z-10 über Pattern */}
+                {/* Container with padding (from index.css), z-10 above pattern */}
 
                 {/* === BACK BUTTON === */}
                 <Link to="/" className="text-light-200 hover:text-white mb-6 inline-block">
                     ← Back to Home
                 </Link>
-                {/* Link navigiert zu Home ("/"), hover-Effekt auf Text */}
+                {/* Link navigates to home ("/"), hover effect on text */}
 
 
                 {/* === BACKDROP IMAGE === */}
@@ -131,29 +149,29 @@ const MovieDetail = () => {
                     {/* Container: rounded corners, hidden overflow, margin-bottom */}
 
                     {movie.backdrop_path && (
-                        /* Nur rendern wenn backdrop_path existiert (Optional Chaining) */
+                        /* Only render if backdrop_path exists (optional chaining) */
 
                         <div className="relative h-[400px]">
-                            {/* Container mit fixer Höhe von 400px */}
+                            {/* Container with fixed height of 400px */}
 
                             <img
                                 src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
-                                // TMDB Image URL: original = höchste Qualität
-                                // Beispiel: /t/p/original/fCayJrkfRaCRCTh8GqN30f8oyQF.jpg
+                                // TMDB image URL: original = highest quality
+                                // Example: /t/p/original/fCayJrkfRaCRCTh8GqN30f8oyQF.jpg
 
                                 alt={movie.title}
                                 className="w-full h-full object-cover"
-                                // w-full: 100% Breite
-                                // h-full: 100% Höhe
-                                // object-cover: Bild füllt Container ohne Verzerrung
+                                // w-full: 100% width
+                                // h-full: 100% height
+                                // object-cover: Image fills container without distortion
                             />
 
                             <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/30 to-transparent"></div>
-                            {/* Gradient Overlay ÜBER dem Bild:
-                                - absolute: positioned über Image
-                                - inset-0: top/right/bottom/left = 0 (füllt parent)
-                                - gradient von unten (primary) nach oben (transparent)
-                                - via-primary/60: Mitte ist 60% transparent
+                            {/* Gradient overlay OVER the image:
+                                - absolute: positioned over image
+                                - inset-0: top/right/bottom/left = 0 (fills parent)
+                                - gradient from bottom (primary) to top (transparent)
+                                - via-primary/30: middle is 30% opacity
                             */}
                         </div>
                     )}
@@ -163,36 +181,36 @@ const MovieDetail = () => {
                 {/* === MAIN CONTENT: POSTER + DETAILS === */}
                 <div className="flex flex-col lg:flex-row gap-8">
                     {/*
-                        Flexbox Layout:
-                        - Mobile: Column (Poster oben, Details unten)
-                        - Desktop (lg): Row (Poster links, Details rechts)
-                        - gap-8: 32px Abstand zwischen Items
+                        Flexbox layout:
+                        - Mobile: Column (poster on top, details below)
+                        - Desktop (lg): Row (poster left, details right)
+                        - gap-8: 32px space between items
                     */}
 
                     {/* === POSTER === */}
                     <div className="flex-shrink-0">
-                        {/* flex-shrink-0: Poster behält seine Größe (wird nicht kleiner) */}
+                        {/* flex-shrink-0: Poster maintains its size (doesn't shrink) */}
 
                         <img
                             src={movie.poster_path
                                 ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                                // Wenn poster_path existiert: TMDB URL mit w500 (Breite 500px)
+                                // If poster_path exists: TMDB URL with w500 (width 500px)
                                 : '/no-movie.png'
-                                // Fallback: Placeholder Image
+                                // Fallback: Placeholder image
                             }
                             alt={movie.title}
                             className="w-full lg:w-80 rounded-2xl shadow-2xl"
-                            // Mobile: volle Breite
-                            // Desktop (lg): feste Breite 320px (w-80)
-                            // rounded-2xl: starke Rundung
-                            // shadow-2xl: großer Schatten
+                            // Mobile: full width
+                            // Desktop (lg): fixed width 320px (w-80)
+                            // rounded-2xl: strong rounding
+                            // shadow-2xl: large shadow
                         />
                     </div>
 
 
                     {/* === DETAILS SECTION === */}
                     <div className="flex-1 min-w-0">
-                        {/* flex-1: Nimmt restlichen Platz ein */}
+                        {/* flex-1: Takes remaining space */}
 
                         {/* === TITLE === */}
                         <h2 className="text-4xl font-bold mb-2">{movie.title}</h2>
@@ -200,18 +218,18 @@ const MovieDetail = () => {
 
                         {/* === TAGLINE (Optional) === */}
                         {movie.tagline && (
-                            /* Nur zeigen wenn tagline existiert */
+                            /* Only show if tagline exists */
                             <p className="text-light-200 italic mb-4">"{movie.tagline}"</p>
-                            // italic Text, light-200 Color (heller grau)
+                            // Italic text, light-200 color (lighter gray)
                         )}
 
 
                         {/* === META INFO (Rating, Year, Runtime, Language) === */}
                         <div className="flex flex-wrap gap-4 mb-6 text-light-200">
                             {/*
-                                flex: Items nebeneinander
-                                flex-wrap: Wenn zu wenig Platz → neue Zeile
-                                gap-4: 16px Abstand
+                                flex: Items side by side
+                                flex-wrap: If not enough space → new line
+                                gap-4: 16px spacing
                             */}
 
                             {/* Rating */}
@@ -219,31 +237,31 @@ const MovieDetail = () => {
                                 <img src="/star.svg" alt="Rating" className="w-5 h-5" />
                                 <span>{movie.vote_average?.toFixed(1)} / 10</span>
                                 {/*
-                                    vote_average?: Optional Chaining (safe access)
-                                    toFixed(1): Rundet auf 1 Dezimalstelle
-                                    Beispiel: 8.365 → 8.4
+                                    vote_average?: Optional chaining (safe access)
+                                    toFixed(1): Round to 1 decimal place
+                                    Example: 8.365 → 8.4
                                 */}
                             </div>
 
-                            <span>•</span>  {/* Bullet Point Separator */}
+                            <span>•</span>  {/* Bullet point separator */}
 
-                            {/* Release Year */}
+                            {/* Release year */}
                             <span>{movie.release_date?.split('-')[0]}</span>
                             {/*
                                 release_date: "2024-03-15"
                                 split('-'): ["2024", "03", "15"]
-                                [0]: "2024" ← erstes Element
+                                [0]: "2024" ← first element
                             */}
 
                             <span>•</span>
 
                             {/* Runtime */}
                             <span>{movie.runtime} min</span>
-                            {/* Beispiel: "142 min" */}
+                            {/* Example: "142 min" */}
 
                             <span>•</span>
 
-                            {/* Original Language */}
+                            {/* Original language */}
                             <span className="uppercase">{movie.original_language}</span>
                             {/* uppercase: en → EN */}
                         </div>
@@ -253,19 +271,19 @@ const MovieDetail = () => {
                         <div className="flex flex-wrap gap-2 mb-6">
                             {movie.genres?.map(genre => (
                                 /*
-                                    genres ist ein Array: [{id: 28, name: "Action"}, ...]
-                                    map: Loope über alle genres
+                                    genres is an array: [{id: 28, name: "Action"}, ...]
+                                    map: Loop through all genres
                                 */
                                 <span
                                     key={genre.id}
-                                    // React Key: eindeutiger Identifier (wichtig!)
+                                    // React key: unique identifier (important!)
 
                                     className="px-4 py-2 bg-light-100/10 rounded-full text-sm"
                                     // px-4: Padding horizontal 16px
-                                    // py-2: Padding vertikal 8px
-                                    // bg-light-100/10: light-100 mit 10% opacity
-                                    // rounded-full: Pill Shape
-                                    // text-sm: kleinere Schrift
+                                    // py-2: Padding vertical 8px
+                                    // bg-light-100/10: light-100 with 10% opacity
+                                    // rounded-full: Pill shape
+                                    // text-sm: smaller font
                                 >
                                     {genre.name}
                                 </span>
@@ -278,7 +296,7 @@ const MovieDetail = () => {
                             <h2 className="text-2xl font-bold mb-3">Overview</h2>
                             <p className="text-light-200 leading-relaxed">
                                 {movie.overview}
-                                {/* leading-relaxed: mehr Zeilenabstand für Lesbarkeit */}
+                                {/* leading-relaxed: more line spacing for readability */}
                             </p>
                         </div>
 
@@ -287,16 +305,16 @@ const MovieDetail = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                             {/*
                                 CSS Grid:
-                                - Mobile: 1 Spalte
-                                - Tablet+ (md): 2 Spalten
-                                - gap-4: 16px zwischen Grid Items
+                                - Mobile: 1 column
+                                - Tablet+ (md): 2 columns
+                                - gap-4: 16px between grid items
                             */}
 
                             {/* Status */}
                             <div>
                                 <h3 className="text-lg font-semibold mb-2">Status</h3>
                                 <p className="text-light-200">{movie.status}</p>
-                                {/* z.B. "Released", "In Production" */}
+                                {/* E.g., "Released", "In Production" */}
                             </div>
 
                             {/* Budget */}
@@ -305,7 +323,7 @@ const MovieDetail = () => {
                                 <p className="text-light-200">
                                     {movie.budget
                                         ? `$${movie.budget.toLocaleString()}`
-                                        // toLocaleString(): Fügt Tausender-Trennzeichen hinzu
+                                        // toLocaleString(): Adds thousand separators
                                         // 160000000 → "160,000,000"
                                         : 'N/A'
                                     }
@@ -323,16 +341,16 @@ const MovieDetail = () => {
                                 </p>
                             </div>
 
-                            {/* Production Countries */}
+                            {/* Production countries */}
                             <div>
                                 <h3 className="text-lg font-semibold mb-2">Production Countries</h3>
                                 <p className="text-light-200">
                                     {movie.production_countries?.map(c => c.name).join(', ') || 'N/A'}
                                     {/*
-                                        Array von Ländern: [{iso_3166_1: "US", name: "United States"}, ...]
-                                        map(c => c.name): Nur die Namen extrahieren
-                                        join(', '): Mit Komma verbinden
-                                        Ergebnis: "United States, United Kingdom"
+                                        Array of countries: [{iso_3166_1: "US", name: "United States"}, ...]
+                                        map(c => c.name): Extract only the names
+                                        join(', '): Combine with comma
+                                        Result: "United States, United Kingdom"
                                     */}
                                 </p>
                             </div>
@@ -341,9 +359,9 @@ const MovieDetail = () => {
 
                         {/* === PRODUCTION COMPANIES === */}
                         {movie.production_companies && movie.production_companies.length > 0 && (
-                            /* Nur zeigen wenn:
-                               1. production_companies existiert UND
-                               2. Array ist nicht leer
+                            /* Only show if:
+                               1. production_companies exists AND
+                               2. Array is not empty
                             */
                             <div className="mb-6">
                                 <h3 className="text-lg font-semibold mb-3">Production Companies</h3>
@@ -351,17 +369,17 @@ const MovieDetail = () => {
                                     {movie.production_companies.map(company => (
                                         <div key={company.id} className="flex items-center gap-2">
                                             {company.logo_path ? (
-                                                /* Wenn Logo vorhanden: zeige Logo */
+                                                /* If logo available: show logo */
                                                 <img
                                                     src={`https://image.tmdb.org/t/p/w200${company.logo_path}`}
                                                     alt={company.name}
                                                     className="h-15 object-contain bg-white/100 p-2 rounded"
-                                                    // h-8: Höhe 32px
-                                                    // object-contain: Behält Aspect Ratio
-                                                    // bg-white/10: leichter weißer Hintergrund
+                                                    // h-15: Height ~60px
+                                                    // object-contain: Maintains aspect ratio
+                                                    // bg-white/100: White background (100% opacity)
                                                 />
                                             ) : (
-                                                /* Kein Logo: zeige Text */
+                                                /* No logo: show text */
                                                 <span className="text-light-200">{company.name}</span>
                                             )}
                                         </div>
@@ -374,30 +392,30 @@ const MovieDetail = () => {
                         {/* === CAST (Top 12) === */}
                         {movie.credits?.cast && movie.credits.cast.length > 0 && (
                             /*
-                                Nur zeigen wenn credits existiert (von append_to_response)
-                                UND cast Array ist nicht leer
+                                Only show if credits exists (from append_to_response)
+                                AND cast array is not empty
                             */
                             <div className="mb-6">
                                 <h3 className="text-lg font-semibold mb-3">Top Cast</h3>
                                 <div className="flex flex-wrap overflow-x-auto gap-4 pb-4 hide-scrollbar">
                                     {/*
-                                        overflow-x-auto: Horizontal scrollbar wenn zu viele Items
-                                        hide-scrollbar: Custom CSS (aus index.css)
-                                        pb-4: Padding-bottom für Scrollbar-Space
+                                        overflow-x-auto: Horizontal scrollbar if too many items
+                                        hide-scrollbar: Custom CSS (from index.css)
+                                        pb-4: Padding-bottom for scrollbar space
                                     */}
 
                                     {movie.credits.cast.slice(0, 12).map(person => (
                                         /*
-                                            slice(0, 10): Nur erste 10 Cast Members
-                                            Array von: {id, name, character, profile_path, ...}
+                                            slice(0, 12): Only first 12 cast members
+                                            Array of: {id, name, character, profile_path, ...}
                                         */
                                         <div key={person.id} className="flex-shrink-0 w-32">
                                             {/*
-                                                flex-shrink-0: Behält Breite (kein Squishing)
-                                                w-32: Feste Breite 128px
+                                                flex-shrink-0: Maintains width (no squishing)
+                                                w-32: Fixed width 128px
                                             */}
 
-                                            {/* Actor Photo */}
+                                            {/* Actor photo */}
                                             <img
                                                 src={person.profile_path
                                                     ? `https://image.tmdb.org/t/p/w200${person.profile_path}`
@@ -405,17 +423,17 @@ const MovieDetail = () => {
                                                 }
                                                 alt={person.name}
                                                 className="w-32 h-48 object-cover rounded-lg mb-2"
-                                                // w-32: 128px Breite
-                                                // h-48: 192px Höhe (portrait ratio)
-                                                // object-cover: Füllt Container
+                                                // w-32: 128px width
+                                                // h-48: 192px height (portrait ratio)
+                                                // object-cover: Fills container
                                             />
 
-                                            {/* Actor Name */}
+                                            {/* Actor name */}
                                             <p className="text-sm font-semibold">{person.name}</p>
 
-                                            {/* Character Name */}
+                                            {/* Character name */}
                                             <p className="text-xs text-light-200">{person.character}</p>
-                                            {/* text-xs: sehr klein (12px) */}
+                                            {/* text-xs: very small (12px) */}
                                         </div>
                                     ))}
                                 </div>
@@ -425,18 +443,18 @@ const MovieDetail = () => {
 
                         {/* === OFFICIAL WEBSITE LINK === */}
                         {movie.homepage && (
-                            /* Nur zeigen wenn homepage URL existiert */
+                            /* Only show if homepage URL exists */
                             <a
                             href={movie.homepage}
                             target="_blank"
-                            // Öffnet in neuem Tab
+                            // Opens in new tab
 
                             rel="noopener noreferrer"
-                            // Sicherheit: Verhindert window.opener access
+                            // Security: Prevents window.opener access
 
                             className="inline-block px-6 py-3 bg-light-100/20 hover:bg-light-100/30 rounded-lg transition"
-                            // inline-block: Macht <a> zu einem Button-Style Element
-                            // hover:bg-light-100/30: Heller bei Mouse-Over
+                            // inline-block: Makes <a> a button-style element
+                            // hover:bg-light-100/30: Lighter on mouse hover
                             // transition: Smooth animation
                             >
                             Visit Official Website →
@@ -449,4 +467,4 @@ const MovieDetail = () => {
     );
 };
 
-export default MovieDetail;
+export default MovieDetails;
