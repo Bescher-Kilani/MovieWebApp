@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+    <!-- Background -->
+    <rect width="200" height="200" rx="30" fill="#030014"/>
+
+    <!-- Film Strip Background -->
+    <rect x="40" y="30" width="120" height="140" rx="10" fill="#AB8BFF"/>
+
+    <!-- Film Frames -->
+    <rect x="55" y="50" width="90" height="25" rx="3" fill="#030014"/>
+    <rect x="55" y="85" width="90" height="25" rx="3" fill="#030014"/>
+    <rect x="55" y="120" width="90" height="25" rx="3" fill="#030014"/>
+
+    <!-- Film Perforations (left side) -->
+    <circle cx="48" cy="45" r="3" fill="#030014"/>
+    <circle cx="48" cy="65" r="3" fill="#030014"/>
+    <circle cx="48" cy="85" r="3" fill="#030014"/>
+    <circle cx="48" cy="105" r="3" fill="#030014"/>
+    <circle cx="48" cy="125" r="3" fill="#030014"/>
+    <circle cx="48" cy="145" r="3" fill="#030014"/>
+    <circle cx="48" cy="165" r="3" fill="#030014"/>
+
+    <!-- Film Perforations (right side) -->
+    <circle cx="152" cy="45" r="3" fill="#030014"/>
+    <circle cx="152" cy="65" r="3" fill="#030014"/>
+    <circle cx="152" cy="85" r="3" fill="#030014"/>
+    <circle cx="152" cy="105" r="3" fill="#030014"/>
+    <circle cx="152" cy="125" r="3" fill="#030014"/>
+    <circle cx="152" cy="145" r="3" fill="#030014"/>
+    <circle cx="152" cy="165" r="3" fill="#030014"/>
+
+    <!-- Play Icon in center frame -->
+    <path d="M95 92 L95 108 L110 100 Z" fill="#AB8BFF"/>
+</svg>
