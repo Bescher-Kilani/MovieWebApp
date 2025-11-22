@@ -5,9 +5,9 @@ A modern, full-stack web application for discovering and exploring movies using 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Railway-blueviolet)](https://bescher-moviehub.up.railway.app)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-blue)](https://github.com/Bescher/MovieWebApp)
 
-![MovieHub Screenshot](./images/Unbenannt.JPG)
-![MovieHub Screenshot](./images/Unbenannt1.JPG) 
-![MovieHub Screenshot](./images/Unbenannt2.JPG) 
+![MovieHub Screenshot](./images/Homepage.JPG)
+![MovieHub Screenshot](./images/Trendingsection.JPG) 
+![MovieHub Screenshot](./images/Moviedetails.JPG) 
 
 ---
 
@@ -52,7 +52,7 @@ A modern, full-stack web application for discovering and exploring movies using 
 ```
 ┌─────────────────┐      ┌─────────────────┐      ┌─────────────────┐
 │   React + Vite  │      │  Spring Boot    │      │   PostgreSQL    │
-│   (Port 80)     │─────▶│   (Port 8080)   │─────▶│   (Port 5432)   │
+│   (Port 80)     │────▶│   (Port 8080)   │─────▶│   (Port 5432)   │
 │   Nginx Server  │      │   REST API      │      │    Database     │
 └─────────────────┘      └─────────────────┘      └─────────────────┘
         │                         │                         │
@@ -228,9 +228,9 @@ MovieWebApp/
 │   └── vite.config.js
 │
 ├── images/                       # README screenshots
-│   ├── Unbenannt.JPG             # Home page screenshot
-│   ├── Unbenannt1.JPG            # Movie details screenshot
-│   └── Unbenannt2.JPG            # Trending section screenshot
+│   ├── Homepage.JPG              # Home page screenshot
+│   ├── Trendingsection.JPG       # Movie details screenshot
+│   └── Moviedetails.JPG          # Trending section screenshot
 │
 ├── docker-compose.yml            # Local development setup
 ├── .railwayignore                # Railway deployment ignore
