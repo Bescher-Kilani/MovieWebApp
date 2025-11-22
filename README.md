@@ -1,0 +1,408 @@
+# 🎬 MovieHub - Full-Stack Movie Search Application
+
+A modern, full-stack web application for discovering and exploring movies using the TMDB API. Built with React, Spring Boot, and PostgreSQL, fully containerized with Docker and deployed on Railway.
+
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Railway-blueviolet)](https://bescher-moviehub.up.railway.app)
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-blue)](https://github.com/yourusername/MovieWebApp)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
+![MovieHub Screenshot](./screenshot.png) <!-- Add a screenshot of your app -->
+
+---
+
+## 🚀 Features
+
+- **🔍 Movie Search** - Search through thousands of movies from TMDB database
+- **🔥 Trending Movies** - View top 5 most searched movies (tracked in backend)
+- **📊 Detailed Movie Info** - View ratings, cast, runtime, budget, revenue, and more
+- **🎨 Modern UI** - Responsive design with Tailwind CSS
+- **⚡ Fast & Reliable** - Nginx-powered frontend with optimized caching
+- **🔒 Secure** - CORS configuration, health checks, and production-ready setup
+
+---
+
+## 🛠️ Tech Stack
+
+### **Frontend**
+- **React 19** - Latest React with Hooks
+- **Vite** - Lightning-fast build tool
+- **Tailwind CSS 4** - Modern utility-first CSS
+- **React Router 7** - Client-side routing
+- **Nginx** - Production web server
+
+### **Backend**
+- **Spring Boot 3.5** - Java REST API
+- **JPA/Hibernate** - ORM for database operations
+- **PostgreSQL 16** - Relational database
+- **Maven** - Dependency management
+- **Lombok** - Reduce boilerplate code
+
+### **DevOps**
+- **Docker** - Containerization
+- **Docker Compose** - Multi-container orchestration
+- **Railway** - Cloud deployment platform
+- **GitHub Actions** - CI/CD (auto-deploy on push)
+
+---
+
+## 📦 Architecture
+
+```
+┌─────────────────┐      ┌─────────────────┐      ┌─────────────────┐
+│   React + Vite  │      │  Spring Boot    │      │   PostgreSQL    │
+│   (Port 80)     │────▶│   (Port 8080)   │────▶ │   (Port 5432)   │
+│   Nginx Server  │      │   REST API      │      │    Database     │
+└─────────────────┘      └─────────────────┘      └─────────────────┘
+        │                         │                         │
+        └─────────────────────────┴─────────────────────────┘
+                              Railway Cloud
+```
+
+---
+
+## 🐳 Docker Setup
+
+This project uses **dual Dockerfile strategy** to support both local development and cloud deployment:
+
+### **Why Two Dockerfiles?**
+
+#### **1. For Local Development (`Dockerfile.local`)**
+- Used by `docker-compose.yml`
+- Build context: Inside service directory (`./Backend`, `./Frontend`)
+- Optimized for fast local iteration
+- Paths are **relative** to service folder
+
+#### **2. For Railway Deployment (`Dockerfile`)**
+- Used by Railway's automatic build
+- Build context: Repository root
+- Optimized for cloud deployment
+- Paths include directory prefix (`Backend/src`, `Frontend/nginx.conf`)
+
+### **Example: Backend Dockerfiles**
+
+**`Backend/Dockerfile.local`** (for docker-compose):
+```dockerfile
+COPY pom.xml .           # ✅ Relative path
+COPY src ./src           # ✅ Relative path
+```
+
+**`Backend/Dockerfile`** (for Railway):
+```dockerfile
+COPY Backend/pom.xml .       # ✅ Absolute path from root
+COPY Backend/src ./src       # ✅ Absolute path from root
+```
+
+This approach allows seamless development locally while maintaining Railway compatibility! 🎯
+
+---
+
+## 🚀 Quick Start
+
+### **Prerequisites**
+- Docker Desktop (or Docker Engine + Docker Compose)
+- Git
+- TMDB API Key ([Get it here](https://www.themoviedb.org/settings/api))
+
+### **1. Clone the Repository**
+```bash
+git clone https://github.com/yourusername/MovieWebApp.git
+cd MovieWebApp
+```
+
+### **2. Configure Environment Variables**
+Create a `.env` file in the root directory:
+
+```env
+# Database
+DB_PASSWORD=your_secure_password
+
+# Frontend
+VITE_API_URL=http://localhost:8080
+VITE_TMDB_API_KEY=your_tmdb_api_key_here
+
+# pgAdmin
+PGADMIN_EMAIL=admin@movieapp.com
+PGADMIN_PASSWORD=your_pgadmin_password
+```
+
+### **3. Start with Docker Compose**
+```bash
+# Build and start all services
+docker-compose up --build -d
+
+# View logs
+docker-compose logs -f
+
+# Stop all services
+docker-compose down
+```
+
+### **4. Access the Application**
+- **Frontend**: http://localhost
+- **Backend API**: http://localhost:8080
+- **pgAdmin**: http://localhost:5050
+
+---
+
+## 🌐 Deployment
+
+### **Railway Deployment**
+
+This project is configured for automatic deployment on Railway:
+
+1. **Fork this repository**
+2. **Connect to Railway**:
+   - Go to [Railway](https://railway.app)
+   - Create new project → Deploy from GitHub
+   - Select your forked repository
+3. **Add Services**:
+   - Add PostgreSQL database
+   - Add Backend service (detects `Backend/Dockerfile`)
+   - Add Frontend service (detects `Frontend/Dockerfile`)
+4. **Configure Environment Variables**:
+
+   **Backend:**
+   ```
+   SPRING_DATASOURCE_URL=postgresql://...
+   SPRING_DATASOURCE_USERNAME=postgres
+   SPRING_DATASOURCE_PASSWORD=...
+   FRONTEND_URL=https://your-frontend.up.railway.app
+   ```
+
+   **Frontend:**
+   ```
+   VITE_API_URL=https://your-backend.up.railway.app
+   VITE_TMDB_API_KEY=your_tmdb_api_key
+   ```
+
+5. **Deploy**: Push to `main` branch → Automatic deployment! 🚀
+
+---
+
+## 📁 Project Structure
+
+```
+MovieWebApp/
+├── Backend/                      # Spring Boot REST API
+│   ├── src/
+│   │   └── main/
+│   │       ├── java/.../
+│   │       │   ├── Controller/   # REST endpoints
+│   │       │   ├── Service/      # Business logic
+│   │       │   ├── Repository/   # Database access
+│   │       │   ├── Entity/       # JPA entities
+│   │       │   └── DTO/          # Data transfer objects
+│   │       └── resources/
+│   │           └── application.properties
+│   ├── Dockerfile                # Production (Railway)
+│   ├── Dockerfile.local          # Local development
+│   └── pom.xml                   # Maven dependencies
+│
+├── Frontend/                     # React + Vite
+│   ├── src/
+│   │   ├── components/           # React components
+│   │   │   ├── Home.jsx          # Main page
+│   │   │   ├── MovieCard.jsx     # Movie card
+│   │   │   ├── MovieDetails.jsx  # Detail page
+│   │   │   ├── Search.jsx        # Search bar
+│   │   │   └── Spinner.jsx       # Loading spinner
+│   │   ├── api.js                # API calls
+│   │   ├── config.js             # Configuration
+│   │   ├── App.jsx               # Router setup
+│   │   └── index.css             # Tailwind styles
+│   ├── public/                   # Static assets
+│   ├── nginx.conf                # Nginx configuration
+│   ├── Dockerfile                # Production (Railway)
+│   ├── Dockerfile.local          # Local development
+│   ├── package.json
+│   └── vite.config.js
+│
+├── docker-compose.yml            # Local development setup
+├── .railwayignore                # Railway deployment ignore
+├── .gitignore
+└── README.md
+```
+
+---
+
+## 🔧 API Endpoints
+
+### **Backend REST API**
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/movies/search` | Track movie search |
+| `GET` | `/api/movies/trending` | Get top 5 trending movies |
+| `GET` | `/actuator/health` | Health check endpoint |
+
+### **Request/Response Examples**
+
+**Track Search:**
+```bash
+POST /api/movies/search
+Content-Type: application/json
+
+{
+  "searchTerm": "Inception",
+  "movieId": "27205",
+  "posterUrl": "https://image.tmdb.org/t/p/w500/..."
+}
+```
+
+**Get Trending:**
+```bash
+GET /api/movies/trending
+
+Response:
+[
+  {
+    "id": 1,
+    "searchTerm": "Inception",
+    "movieId": "27205",
+    "count": 42,
+    "posterUrl": "...",
+    "createdAt": "2024-11-20T10:00:00",
+    "updatedAt": "2024-11-22T15:30:00"
+  },
+  ...
+]
+```
+
+---
+
+## 🎨 Environment Variables
+
+### **Frontend (`Frontend/.env.local`)**
+```env
+VITE_API_URL=http://localhost:8080
+VITE_TMDB_API_KEY=your_tmdb_api_key
+```
+
+### **Backend (`Backend/src/main/resources/application.properties`)**
+```properties
+spring.datasource.url=${SPRING_DATASOURCE_URL}
+spring.datasource.username=${SPRING_DATASOURCE_USERNAME}
+spring.datasource.password=${SPRING_DATASOURCE_PASSWORD}
+frontend.url=${FRONTEND_URL:http://localhost}
+```
+
+---
+
+## 🧪 Development
+
+### **Run Backend Locally (without Docker)**
+```bash
+cd Backend
+./mvnw spring-boot:run
+```
+
+### **Run Frontend Locally (without Docker)**
+```bash
+cd Frontend
+npm install
+npm run dev
+```
+
+### **Database Access**
+- **pgAdmin**: http://localhost:5050
+- **Direct Connection**:
+  ```
+  Host: localhost
+  Port: 5432
+  Database: moviedb
+  Username: postgres
+  Password: (from .env)
+  ```
+
+---
+
+## 🐛 Troubleshooting
+
+### **Docker Compose Issues**
+
+**Problem**: `Backend/src: not found`
+```bash
+# Solution: Make sure you're using Dockerfile.local
+docker-compose down
+docker-compose up --build -d
+```
+
+**Problem**: Port already in use
+```bash
+# Find and kill process on port 8080 (Windows)
+netstat -ano | findstr :8080
+taskkill /PID <PID> /F
+
+# Or change port in docker-compose.yml
+```
+
+### **Railway Deployment Issues**
+
+**Problem**: Environment variables not set
+- Check Railway dashboard → Service → Variables
+- Ensure all required variables are set
+
+**Problem**: Build fails on Railway
+- Railway uses `Dockerfile` (not `Dockerfile.local`)
+- Check build logs for missing files
+- Verify paths include directory prefix (`Backend/`, `Frontend/`)
+
+---
+
+## 📊 Database Schema
+
+```sql
+CREATE TABLE movie_searches (
+    id BIGSERIAL PRIMARY KEY,
+    search_term VARCHAR(255) NOT NULL UNIQUE,
+    movie_id VARCHAR(255) NOT NULL,
+    count INTEGER NOT NULL DEFAULT 0,
+    poster_url VARCHAR(500),
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP
+);
+```
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🙏 Acknowledgments
+
+- [TMDB API](https://www.themoviedb.org/documentation/api) - Movie data
+- [Railway](https://railway.app) - Cloud hosting
+- [Tailwind CSS](https://tailwindcss.com) - CSS framework
+- [Spring Boot](https://spring.io/projects/spring-boot) - Backend framework
+- [React](https://react.dev) - Frontend library
+
+---
+
+## 📧 Contact
+
+**Your Name** - [@yourtwitter](https://twitter.com/yourtwitter)
+
+**Project Link**: [https://github.com/yourusername/MovieWebApp](https://github.com/yourusername/MovieWebApp)
+
+**Live Demo**: [https://bescher-moviehub.up.railway.app](https://bescher-moviehub.up.railway.app)
+
+---
+
+## 🌟 Star this repo if you found it helpful!
+
+Made with ❤️ by [Your Name]
