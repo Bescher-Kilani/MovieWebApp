@@ -34,7 +34,7 @@ public class WebConfig {
                                 "http://localhost:80",          // With port 80
                                 "http://localhost:8080",        // Backend port (for testing)
                                 "http://localhost:5173",        // Local Vite dev server
-                                "https://*.railway.app"         // Railway deployment wildcard
+                                "https://bescher-moviehub.up.railway.app"         // Railway deployment
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")  // Allowed HTTP methods
                         .allowedHeaders("*")        // Allow all headers
