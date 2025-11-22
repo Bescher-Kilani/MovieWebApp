@@ -19,6 +19,7 @@ A modern, full-stack web application for discovering and exploring movies using 
 - **🎨 Modern UI** - Responsive design with Tailwind CSS
 - **⚡ Fast & Reliable** - Nginx-powered frontend with optimized caching
 - **🔒 Secure** - CORS configuration, health checks, and production-ready setup
+- **🚀 CI/CD Pipeline** - Automatic deployment to Railway on every push to main branch
 
 ---
 
@@ -42,7 +43,7 @@ A modern, full-stack web application for discovering and exploring movies using 
 - **Docker** - Containerization
 - **Docker Compose** - Multi-container orchestration
 - **Railway** - Cloud deployment platform
-- **GitHub Actions** - CI/CD (auto-deploy on push)
+- **CI/CD** - Automatic deployment on git push
 
 ---
 
@@ -141,6 +142,7 @@ docker-compose down
 ### **4. Access the Application**
 - **Frontend**: http://localhost
 - **Backend API**: http://localhost:8080
+- **Backend Health**: http://localhost:8080/actuator/health
 - **pgAdmin**: http://localhost:5050
 
 ---
@@ -177,6 +179,13 @@ This project is configured for automatic deployment on Railway:
    ```
 
 5. **Deploy**: Push to `main` branch → Automatic deployment! 🚀
+
+### **CI/CD Pipeline**
+Every push to the `main` branch triggers:
+- Automatic Docker build on Railway
+- Deployment to production environment
+- Health checks to verify deployment
+- Zero-downtime rolling updates
 
 ---
 
@@ -217,6 +226,11 @@ MovieWebApp/
 │   ├── Dockerfile.local          # Local development
 │   ├── package.json
 │   └── vite.config.js
+│
+├── images/                       # README screenshots
+│   ├── Unbenannt.JPG             # Home page screenshot
+│   ├── Unbenannt1.JPG            # Movie details screenshot
+│   └── Unbenannt2.JPG            # Trending section screenshot
 │
 ├── docker-compose.yml            # Local development setup
 ├── .railwayignore                # Railway deployment ignore
@@ -269,6 +283,71 @@ Response:
 ]
 ```
 
+**Health Check:**
+```bash
+GET /actuator/health
+
+Response:
+{
+  "status": "UP",
+  "components": {
+    "db": {
+      "status": "UP"
+    },
+    "diskSpace": {
+      "status": "UP"
+    }
+  }
+}
+```
+
+---
+
+## 🏥 Health Monitoring
+
+### **Check Application Health**
+
+**Local Development:**
+```bash
+# Backend health check
+curl http://localhost:8080/actuator/health
+
+# Check if frontend is serving
+curl http://localhost
+
+# Check database connection (via pgAdmin)
+# Visit: http://localhost:5050
+```
+
+**Production (Railway):**
+```bash
+# Backend health check
+curl https://backend-production-4178.up.railway.app/actuator/health
+
+# Frontend availability
+curl https://bescher-moviehub.up.railway.app
+```
+
+### **Health Check Components**
+
+The Spring Boot Actuator provides detailed health information:
+
+- **Database Connection** - PostgreSQL connection status
+- **Disk Space** - Available disk space on server
+- **Custom Health Indicators** - Add your own health checks
+
+### **Monitoring in Railway**
+
+Railway provides built-in monitoring:
+1. Go to Railway Dashboard → Your Service
+2. Click on **Metrics** tab
+3. View:
+   - CPU Usage
+   - Memory Usage
+   - Network Traffic
+   - Request Logs
+   - Error Rates
+
 ---
 
 ## 🎨 Environment Variables
@@ -295,6 +374,9 @@ frontend.url=${FRONTEND_URL:http://localhost}
 ```bash
 cd Backend
 ./mvnw spring-boot:run
+
+# Check health after startup
+curl http://localhost:8080/actuator/health
 ```
 
 ### **Run Frontend Locally (without Docker)**
@@ -344,6 +426,21 @@ Windows/Linux: Ctrl + Shift + R
 Mac: Cmd + Shift + R
 ```
 
+**Problem**: Backend health check fails
+```bash
+# Check if backend is running
+docker-compose ps
+
+# View backend logs
+docker-compose logs backend
+
+# Restart backend service
+docker-compose restart backend
+
+# Verify health endpoint
+curl http://localhost:8080/actuator/health
+```
+
 ### **Railway Deployment Issues**
 
 **Problem**: Environment variables not set
@@ -354,6 +451,11 @@ Mac: Cmd + Shift + R
 - Railway uses `Dockerfile` (not `Dockerfile.local`)
 - Check build logs for missing files
 - Verify paths include directory prefix (`Backend/`, `Frontend/`)
+
+**Problem**: Service shows as unhealthy
+- Check Railway logs for errors
+- Verify environment variables are correct
+- Test health endpoint: `curl https://your-backend.up.railway.app/actuator/health`
 
 ---
 
@@ -413,7 +515,7 @@ CREATE TABLE movie_searches (
 
 ## 📧 Contact
 
-**Bescher** - [GitHub Profile](https://github.com/Bescher)
+**Bescher** - [GitHub Profile](https://github.com/Bescher-Kilani)
 
 **Project Link**: [https://github.com/Bescher/MovieWebApp](https://github.com/Bescher/MovieWebApp)
 
