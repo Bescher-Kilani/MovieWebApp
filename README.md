@@ -517,7 +517,7 @@ CREATE TABLE movie_searches (
 
 **Bescher** - [GitHub Profile](https://github.com/Bescher-Kilani)
 
-**Project Link**: [https://github.com/Bescher/MovieWebApp](https://github.com/Bescher/MovieWebApp)
+**Project Link**: [https://github.com/Bescher-Kilani/MovieWebApp](https://github.com/Bescher-Kilani/MovieWebApp)
 
 **Live Demo**: [https://bescher-moviehub.up.railway.app](https://bescher-moviehub.up.railway.app)
 
