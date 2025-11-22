@@ -14,7 +14,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig {
 
     // Inject frontend URL from application.properties with default fallback
-    @Value("${frontend.url:http://localhost:5173}")
+    @Value("${frontend.url:http://localhost}")
     private String frontendUrl;
 
     /**
@@ -29,8 +29,11 @@ public class WebConfig {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")  // Apply CORS to all /api/* endpoints
                         .allowedOrigins(
-                                frontendUrl,                    // Frontend URL from properties
-                                "http://localhost:5173",        // Local development
+                                frontendUrl,                    // From properties (http://localhost)
+                                "http://localhost",             // Without port
+                                "http://localhost:80",          // With port 80
+                                "http://localhost:8080",        // Backend port (for testing)
+                                "http://localhost:5173",        // Local Vite dev server
                                 "https://*.railway.app"         // Railway deployment wildcard
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")  // Allowed HTTP methods
