@@ -1,68 +1,188 @@
-version: '3.8'
+
 
 services:
-  # PostgreSQL Database
+  # =============================================================================
+  # POSTGRESQL DATABASE
+  # =============================================================================
+  # Official PostgreSQL 16 Alpine image (lightweight ~50MB)
+  # Stores movie search data (search_term, count, poster_url)
   database:
     image: postgres:16-alpine
     container_name: movieapp-db
-    restart: unless-stopped
+    restart: unless-stopped  # Auto-restart on crash (except manual stop)
+    
     environment:
-      POSTGRES_DB: moviedb
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-admin123}
+      # Database credentials
+      POSTGRES_DB: moviedb                          # Database name
+      POSTGRES_USER: postgres                       # Username
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-admin123}   # Password from .env (fallback: admin123)
+    
     volumes:
+      # Persist database data (survives container restarts)
       - postgres_data:/var/lib/postgresql/data
+    
     networks:
-      - app-network
+      - app-network  # Internal Docker network (services can talk to each other)
+    
+    # Health check: Docker monitors if service is healthy
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      test: ["CMD-SHELL", "pg_isready -U postgres"]  # Command to check if DB is ready
+      interval: 10s   # Check every 10 seconds
+      timeout: 5s     # Fail if check takes longer than 5 seconds
+      retries: 5      # Try 5 times before marking as unhealthy
+    
+    # Resource limits (prevents consuming all system resources)
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'      # Maximum: 1 CPU core
+          memory: 1G       # Maximum: 1 GB RAM
+        reservations:
+          cpus: '0.5'      # Minimum guaranteed: 0.5 CPU core
+          memory: 512M     # Minimum guaranteed: 512 MB RAM
 
-  # Spring Boot Backend
+  # =============================================================================
+  # SPRING BOOT BACKEND
+  # =============================================================================
+  # Java REST API with JPA/Hibernate
+  # Handles movie search tracking and trending movies
   backend:
     build:
-      context: .
-      dockerfile: Backend.Dockerfile
+      context: ./Backend                  # Build context (root directory)
+      dockerfile: Dockerfile      # Path to Dockerfile
+    
     container_name: movieapp-backend
     restart: unless-stopped
+    
     environment:
+      # Database connection (uses 'database' hostname from Docker network)
       SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/moviedb
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-admin123}
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update  # Auto-create/update tables
+      
+      # CORS configuration (allow frontend to call API)
+      FRONTEND_URL: http://localhost:80
+      
+      # JVM memory settings
+      # -Xms256m: Start with 256 MB heap
+      # -Xmx512m: Maximum 512 MB heap (prevents excessive memory usage)
+      JAVA_OPTS: "-Xmx512m -Xms256m"
+      
+      # Server configuration
+      SERVER_PORT: 8080
+    
     depends_on:
       database:
-        condition: service_healthy
+        condition: service_healthy  # Wait until database health check passes
+    
     networks:
       - app-network
+    
+    ports:
+      - "8080:8080"  # Expose port 8080 to host machine
+    
+    # Health check: Monitors Spring Boot Actuator endpoint
     healthcheck:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/actuator/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
+      interval: 30s       # Check every 30 seconds
+      timeout: 10s        # Fail if check takes longer than 10 seconds
+      retries: 3          # Try 3 times before marking as unhealthy
+      start_period: 40s   # Wait 40 seconds before first check (Spring Boot startup time)
+    
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 768M     # Spring Boot needs more RAM than database
+        reservations:
+          cpus: '0.5'
+          memory: 512M
 
-  # React Frontend with Nginx
+  # =============================================================================
+  # REACT FRONTEND WITH NGINX
+  # =============================================================================
+  # Vite-built React app served by Nginx
+  # Handles movie search UI, trending movies, movie details
   frontend:
     build:
-      context: .
-      dockerfile: Frontend.Dockerfile
+      context: ./Frontend
+      dockerfile: Dockerfile
+      args:
+        # Build-time environment variables (baked into the build)
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:8080}  # Backend API URL
+        VITE_TMDB_API_KEY: ${VITE_TMDB_API_KEY}               # TMDB API key
+    
     container_name: movieapp-frontend
     restart: unless-stopped
+    
     ports:
-      - "80:80"
-      - "443:443"
+      - "80:80"    # HTTP
+
+    
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy  # Wait until backend is ready
+    
     networks:
       - app-network
+    
+    # Resource limits (Nginx is lightweight, doesn't need much)
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
 
+  # =============================================================================
+  # PGADMIN - DATABASE MANAGEMENT UI (OPTIONAL)
+  # =============================================================================
+  # Web-based PostgreSQL admin tool
+  # Only starts with: docker-compose --profile dev up
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: movieapp-pgadmin
+    restart: unless-stopped
+    
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@movieapp.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin123}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'  # Desktop mode (no user management)
+    
+    ports:
+      - "5050:80"  # Access at http://localhost:5050
+    
+    depends_on:
+      - database
+    
+    networks:
+      - app-network
+    
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin  # Persist pgAdmin settings
+    
+    profiles:
+      - dev  # Only starts with --profile dev flag
+
+# =============================================================================
+# NETWORKS
+# =============================================================================
+# Internal Docker network for service-to-service communication
+# Services can reach each other by container name (e.g., backend → database)
 networks:
   app-network:
-    driver: bridge
+    driver: bridge  # Default Docker network type
 
+# =============================================================================
+# VOLUMES
+# =============================================================================
+# Named volumes persist data across container restarts/rebuilds
 volumes:
   postgres_data:
+    driver: local  # Store on host machine
+  pgadmin_data:
     driver: local

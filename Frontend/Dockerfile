@@ -4,18 +4,17 @@ FROM node:20-alpine AS build
 WORKDIR /app
 
 # Copy package files
-COPY Frontend/package*.json ./
+COPY package*.json ./
 
 # Install dependencies
 RUN npm ci
 
 # Copy source code
-COPY Frontend/ .
+COPY . .
 
-# Build argument für API URL
+# Build arguments
 ARG VITE_API_URL
 ENV VITE_API_URL=$VITE_API_URL
-RUN echo "Building with API_URL: $VITE_API_URL"  # <- NEU: Force rebuild
 
 ARG VITE_TMDB_API_KEY
 ENV VITE_TMDB_API_KEY=$VITE_TMDB_API_KEY
