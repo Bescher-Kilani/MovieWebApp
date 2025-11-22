@@ -4,17 +4,17 @@
 FROM maven:3.9.11-eclipse-temurin-21-alpine AS build
 WORKDIR /app
 
-# Copy Maven files first for better caching
-COPY Backend/pom.xml .
-COPY Backend/.mvn .mvn
-COPY Backend/mvnw .
+# Copy Maven files
+COPY pom.xml .
+COPY .mvn .mvn
+COPY mvnw .
 RUN chmod +x mvnw
 
 # Download dependencies
 RUN ./mvnw dependency:go-offline -B
 
 # Copy source code
-COPY Backend/src ./src
+COPY src ./src
 
 # Build application
 RUN ./mvnw clean package -DskipTests
