@@ -49,7 +49,7 @@ services:
   backend:
     build:
       context: ./Backend                  # Build context (Backend directory)
-      dockerfile: Dockerfile              # Path to Dockerfile
+      dockerfile: Dockerfile.local              # Path to Dockerfile
     
     container_name: movieapp-backend
     restart: unless-stopped
@@ -108,7 +108,7 @@ services:
   frontend:
     build:
       context: ./Frontend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.local
       args:
         # Build-time environment variables (baked into the build)
         VITE_API_URL: ${VITE_API_URL:-http://localhost:8080}  # Backend API URL
