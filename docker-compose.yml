@@ -117,8 +117,7 @@ services:
     
     ports:
       - "80:80"      # HTTP on port 80
-      - "8081:80"    # Also accessible on port 8081
-    
+          
     depends_on:
       backend:
         condition: service_healthy  # Wait until backend is ready

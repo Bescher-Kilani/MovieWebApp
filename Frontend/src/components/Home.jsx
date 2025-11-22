@@ -66,7 +66,7 @@ const Home = () => {
             // Choose endpoint based on whether we have a search query
             const endpoint = query
                 ? `${API_BASE_URL}/search/movie?query=${encodeURIComponent(query)}`  // Search endpoint
-                : `${API_BASE_URL}/discover/movie?sort_by=popularity.desc`;          // Popular movies
+                : `${API_BASE_URL}/trending/movie/week`;          // Popular movies
 
             const response = await fetch(endpoint, API_OPTIONS);
 
