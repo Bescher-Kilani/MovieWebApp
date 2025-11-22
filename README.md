@@ -6,7 +6,9 @@ A modern, full-stack web application for discovering and exploring movies using 
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-blue)](https://github.com/yourusername/MovieWebApp)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-![MovieHub Screenshot](./screenshot.png) <!-- Add a screenshot of your app -->
+![MovieHub Screenshot](./images/Unbenannt.JPG)
+![MovieHub Screenshot](./images/Unbenannt1.JPG) 
+![MovieHub Screenshot](./images/Unbenannt2.JPG) 
 
 ---
 
