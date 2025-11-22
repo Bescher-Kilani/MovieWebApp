@@ -1,4 +1,4 @@
-
+version: '3.8'
 
 services:
   # =============================================================================
@@ -48,8 +48,8 @@ services:
   # Handles movie search tracking and trending movies
   backend:
     build:
-      context: ./Backend                  # Build context (root directory)
-      dockerfile: Dockerfile      # Path to Dockerfile
+      context: ./Backend                  # Build context (Backend directory)
+      dockerfile: Dockerfile              # Path to Dockerfile
     
     container_name: movieapp-backend
     restart: unless-stopped
@@ -62,7 +62,7 @@ services:
       SPRING_JPA_HIBERNATE_DDL_AUTO: update  # Auto-create/update tables
       
       # CORS configuration (allow frontend to call API)
-      FRONTEND_URL: http://localhost:80
+      FRONTEND_URL: http://localhost
       
       # JVM memory settings
       # -Xms256m: Start with 256 MB heap
@@ -118,8 +118,8 @@ services:
     restart: unless-stopped
     
     ports:
-      - "80:80"    # HTTP
-
+      - "80:80"      # HTTP on port 80
+      - "8081:80"    # Also accessible on port 8081
     
     depends_on:
       backend:
@@ -139,10 +139,10 @@ services:
           memory: 128M
 
   # =============================================================================
-  # PGADMIN - DATABASE MANAGEMENT UI (OPTIONAL)
+  # PGADMIN - DATABASE MANAGEMENT UI
   # =============================================================================
   # Web-based PostgreSQL admin tool
-  # Only starts with: docker-compose --profile dev up
+  # Access at http://localhost:5050
   pgadmin:
     image: dpage/pgadmin4:latest
     container_name: movieapp-pgadmin
@@ -164,9 +164,6 @@ services:
     
     volumes:
       - pgadmin_data:/var/lib/pgadmin  # Persist pgAdmin settings
-    
-    profiles:
-      - dev  # Only starts with --profile dev flag
 
 # =============================================================================
 # NETWORKS
