@@ -50,7 +50,7 @@ const Home = () => {
     // Waits 0,5 second after user stops typing before triggering search
     // Prevents excessive API calls while user is still typing
     // Example: User types "batman" → Only searches after "batman" is complete
-    useDebounce(() => setDebouncedSearchTerm(searchTerm), 500, [searchTerm])
+    useDebounce(() => setDebouncedSearchTerm(searchTerm), 1000, [searchTerm])
 
     // ==========================================================================
     // FETCH MOVIES FROM TMDB

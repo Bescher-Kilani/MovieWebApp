@@ -187,6 +187,35 @@ Every push to the `main` branch triggers:
 - Health checks to verify deployment
 - Zero-downtime rolling updates
 
+### **⚡ Serverless Mode (Cost Optimization)**
+
+Railway's Serverless feature automatically sleeps inactive services to reduce costs:
+
+**How it works:**
+- Services sleep after **10 minutes of inactivity** (no outbound traffic)
+- First request after sleep causes a **~20 second cold start**
+- Subsequent requests are instant (normal response time)
+- Automatically wakes on incoming traffic
+
+**What counts as activity:**
+- HTTP requests (inbound/outbound)
+- Database connections
+- Private network traffic
+- Any outbound packets
+
+**Important Notes:**
+- ⏱️ **Cold Start Time**: ~20 seconds on first request after sleep
+- 💰 **Cost Savings**: Only pay when service is active
+- 🔄 **Automatic**: No configuration needed
+- 📊 **Monitoring**: Check Railway Metrics tab for sleep/wake events
+
+**To disable Serverless:**
+```
+Railway Dashboard → Service → Settings → Disable Serverless
+```
+
+> **Tip**: For production apps with constant traffic, consider disabling Serverless to avoid cold starts. For development or low-traffic apps, Serverless significantly reduces costs.
+
 ---
 
 ## 📁 Project Structure
@@ -229,8 +258,8 @@ MovieWebApp/
 │
 ├── images/                       # README screenshots
 │   ├── Homepage.JPG              # Home page screenshot
-│   ├── Trendingsection.JPG       # Movie details screenshot
-│   └── Moviedetails.JPG          # Trending section screenshot
+│   ├── Trendingsection.JPG       # Trending section screenshot
+│   └── Moviedetails.JPG          # Movie details screenshot
 │
 ├── docker-compose.yml            # Local development setup
 ├── .railwayignore                # Railway deployment ignore
@@ -456,6 +485,12 @@ curl http://localhost:8080/actuator/health
 - Check Railway logs for errors
 - Verify environment variables are correct
 - Test health endpoint: `curl https://your-backend.up.railway.app/actuator/health`
+
+**Problem**: Slow first request (~20 seconds)**
+- This is normal behavior when Serverless mode is enabled
+- Service was asleep and needs to cold start
+- Subsequent requests will be instant
+- To avoid: Disable Serverless in Railway settings
 
 ---
 
