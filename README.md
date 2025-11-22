@@ -3,8 +3,7 @@
 A modern, full-stack web application for discovering and exploring movies using the TMDB API. Built with React, Spring Boot, and PostgreSQL, fully containerized with Docker and deployed on Railway.
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Railway-blueviolet)](https://bescher-moviehub.up.railway.app)
-[![GitHub](https://img.shields.io/badge/GitHub-Repository-blue)](https://github.com/yourusername/MovieWebApp)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-blue)](https://github.com/Bescher/MovieWebApp)
 
 ![MovieHub Screenshot](./images/Unbenannt.JPG)
 ![MovieHub Screenshot](./images/Unbenannt1.JPG) 
@@ -52,7 +51,7 @@ A modern, full-stack web application for discovering and exploring movies using 
 ```
 ┌─────────────────┐      ┌─────────────────┐      ┌─────────────────┐
 │   React + Vite  │      │  Spring Boot    │      │   PostgreSQL    │
-│   (Port 80)     │────▶│   (Port 8080)   │────▶ │   (Port 5432)   │
+│   (Port 80)     │─────▶│   (Port 8080)   │─────▶│   (Port 5432)   │
 │   Nginx Server  │      │   REST API      │      │    Database     │
 └─────────────────┘      └─────────────────┘      └─────────────────┘
         │                         │                         │
@@ -107,7 +106,7 @@ This approach allows seamless development locally while maintaining Railway comp
 
 ### **1. Clone the Repository**
 ```bash
-git clone https://github.com/yourusername/MovieWebApp.git
+git clone https://github.com/Bescher/MovieWebApp.git
 cd MovieWebApp
 ```
 
@@ -338,6 +337,13 @@ taskkill /PID <PID> /F
 # Or change port in docker-compose.yml
 ```
 
+**Problem**: Browser shows old cached version
+```bash
+# Hard refresh to clear cache
+Windows/Linux: Ctrl + Shift + R
+Mac: Cmd + Shift + R
+```
+
 ### **Railway Deployment Issues**
 
 **Problem**: Environment variables not set
@@ -367,21 +373,31 @@ CREATE TABLE movie_searches (
 
 ---
 
-## 🤝 Contributing
+## 🎯 Roadmap - Next Steps
 
-Contributions are welcome! Please follow these steps:
+### **Phase 1: User Features** 👤
+- [ ] **User Authentication** - Spring Security + JWT for login/registration
+- [ ] **Watchlist & Favorites** - Save movies to personal watchlist
+- [ ] **User Ratings & Reviews** - Rate movies with 1-5 stars and write reviews
+- [ ] **User Profile Page** - View and edit user information
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+### **Phase 2: Enhanced Discovery** 🔍
+- [ ] **Advanced Filters** - Filter by genre, year, rating, language
+- [ ] **Recommendation Engine** - AI-powered movie recommendations based on user preferences
+- [ ] **Similar Movies** - "If you liked X, you might like Y"
+- [ ] **TV Shows Support** - Expand to include TV series and episode tracking
 
----
+### **Phase 3: Social Features** 👥
+- [ ] **Follow System** - Follow other users and see their activity
+- [ ] **Activity Feed** - See what movies friends are watching
+- [ ] **Share Reviews** - Share movie recommendations on social media
+- [ ] **Discussion Forums** - Community discussions about movies
 
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+### **Phase 4: Advanced Features** 🚀
+- [ ] **Video Trailers** - Embedded YouTube trailers with playlist support
+- [ ] **Admin Dashboard** - User management, analytics, and content moderation
+- [ ] **Real-time Notifications** - Get notified about new releases and friend activity
+- [ ] **Progressive Web App (PWA)** - Offline support and mobile installation
 
 ---
 
@@ -397,9 +413,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📧 Contact
 
-**Your Name** - [@yourtwitter](https://twitter.com/yourtwitter)
+**Bescher** - [GitHub Profile](https://github.com/Bescher)
 
-**Project Link**: [https://github.com/yourusername/MovieWebApp](https://github.com/yourusername/MovieWebApp)
+**Project Link**: [https://github.com/Bescher/MovieWebApp](https://github.com/Bescher/MovieWebApp)
 
 **Live Demo**: [https://bescher-moviehub.up.railway.app](https://bescher-moviehub.up.railway.app)
 
@@ -407,4 +423,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🌟 Star this repo if you found it helpful!
 
-Made with ❤️ by [Your Name]
+Made with ❤️ by Bescher
