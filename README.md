@@ -209,13 +209,6 @@ Railway's Serverless feature automatically sleeps inactive services to reduce co
 - 🔄 **Automatic**: No configuration needed
 - 📊 **Monitoring**: Check Railway Metrics tab for sleep/wake events
 
-**To disable Serverless:**
-```
-Railway Dashboard → Service → Settings → Disable Serverless
-```
-
-> **Tip**: For production apps with constant traffic, consider disabling Serverless to avoid cold starts. For development or low-traffic apps, Serverless significantly reduces costs.
-
 ---
 
 ## 📁 Project Structure
