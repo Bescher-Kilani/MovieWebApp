@@ -3,7 +3,7 @@
 A modern, full-stack web application for discovering and exploring movies using the TMDB API. Built with React, Spring Boot, and PostgreSQL, fully containerized with Docker and deployed on Railway.
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Railway-blueviolet)](https://bescher-moviehub.up.railway.app)
-[![GitHub](https://img.shields.io/badge/GitHub-Repository-blue)](https://github.com/Bescher/MovieWebApp)
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-blue)](https://github.com/Bescher-Kilani/MovieWebApp)
 
 ![MovieHub Screenshot](./images/Homepage.JPG)
 ![MovieHub Screenshot](./images/Trendingsection.JPG) 
