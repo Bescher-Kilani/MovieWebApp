@@ -503,31 +503,13 @@ CREATE TABLE movie_searches (
 
 ---
 
-## 🎯 Roadmap - Next Steps
+## 🎯 TODOs
 
-### **Phase 1: User Features** 👤
-- [ ] **User Authentication** - Spring Security + JWT for login/registration
-- [ ] **Watchlist & Favorites** - Save movies to personal watchlist
-- [ ] **User Ratings & Reviews** - Rate movies with 1-5 stars and write reviews
-- [ ] **User Profile Page** - View and edit user information
-
-### **Phase 2: Enhanced Discovery** 🔍
+### **Planned Features**
+- [ ] **User Authentication** - Login/registration with watchlist and favorites
 - [ ] **Advanced Filters** - Filter by genre, year, rating, language
-- [ ] **Recommendation Engine** - AI-powered movie recommendations based on user preferences
-- [ ] **Similar Movies** - "If you liked X, you might like Y"
-- [ ] **TV Shows Support** - Expand to include TV series and episode tracking
-
-### **Phase 3: Social Features** 👥
-- [ ] **Follow System** - Follow other users and see their activity
-- [ ] **Activity Feed** - See what movies friends are watching
-- [ ] **Share Reviews** - Share movie recommendations on social media
-- [ ] **Discussion Forums** - Community discussions about movies
-
-### **Phase 4: Advanced Features** 🚀
-- [ ] **Video Trailers** - Embedded YouTube trailers with playlist support
-- [ ] **Admin Dashboard** - User management, analytics, and content moderation
-- [ ] **Real-time Notifications** - Get notified about new releases and friend activity
-- [ ] **Progressive Web App (PWA)** - Offline support and mobile installation
+- [ ] **Recommendation Engine** - AI-powered movie recommendations
+- [ ] **TV Shows Support** - Expand to include TV series tracking
 
 ---
 
@@ -543,14 +525,17 @@ CREATE TABLE movie_searches (
 
 ## 📧 Contact
 
-**Bescher** - [GitHub Profile](https://github.com/Bescher-Kilani)
+**Bescher Kilani**
+- 🌐 GitHub: [@Bescher-Kilani](https://github.com/Bescher-Kilani)
+- 📧 Email: bescherkilani@gmail.com
+- 💼 LinkedIn: [Bescher Kilani](https://linkedin.com/in/bescher-kilani-34726a361)
 
-**Project Link**: [https://github.com/Bescher-Kilani/MovieWebApp](https://github.com/Bescher-Kilani/MovieWebApp)
-
-**Live Demo**: [https://bescher-moviehub.up.railway.app](https://bescher-moviehub.up.railway.app)
+**Project Links**
+- 🔗 Repository: [https://github.com/Bescher-Kilani/MovieWebApp](https://github.com/Bescher-Kilani/MovieWebApp)
+- 🚀 Live Demo: [https://bescher-moviehub.up.railway.app](https://bescher-moviehub.up.railway.app)
 
 ---
 
 ## 🌟 Star this repo if you found it helpful!
 
-Made with ❤️ by Bescher
+Made with ❤️ by Bescher Kilani
